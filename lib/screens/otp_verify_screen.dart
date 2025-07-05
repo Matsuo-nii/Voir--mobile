@@ -17,6 +17,7 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
 
   void _verify() async {
     final res = await OTPAuthAPI.verifyOTP(widget.email, _otp.text.trim());
+
     if (res['success']) {
       Navigator.pushReplacement(
         context,
@@ -24,7 +25,7 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
       );
     } else {
       setState(() {
-        message = res['message'];
+        message = res['message'] ?? 'Invalid OTP';
         messageColor = Colors.red;
       });
     }
@@ -32,23 +33,71 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final redColor = Colors.red[600];
+
     return Scaffold(
-      appBar: AppBar(title: Text('Enter OTP')),
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Text('An OTP has been sent to your email.', textAlign: TextAlign.center),
-            TextField(
-              controller: _otp,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Enter OTP'),
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        title: Text('OTP Verification', style: TextStyle(color: redColor)),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: IconThemeData(color: redColor),
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(24),
+          child: Card(
+            elevation: 6,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Padding(
+              padding: EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.mark_email_read_rounded, size: 64, color: redColor),
+                  SizedBox(height: 16),
+                  Text(
+                    'Enter the OTP sent to your email',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  SizedBox(height: 24),
+                  TextField(
+                    controller: _otp,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: '6-digit OTP',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.pin),
+                    ),
+                  ),
+                  SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: _verify,
+                      icon: Icon(Icons.verified_user),
+                      label: Text('Verify OTP'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: redColor,
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (message.isNotEmpty) ...[
+                    SizedBox(height: 12),
+                    Text(message, style: TextStyle(color: messageColor)),
+                  ]
+                ],
+              ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(onPressed: _verify, child: Text('Verify OTP')),
-            SizedBox(height: 10),
-            Text(message, style: TextStyle(color: messageColor)),
-          ],
+          ),
         ),
       ),
     );
