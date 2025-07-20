@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class OTPAuthAPI {
-  static const String baseUrl = 'http://192.168.91.21/voir_api';
+  static const String baseUrl = 'http://192.168.254.168/voir_api';
 
   static Future<Map<String, dynamic>> login(String email, String password) async {
     final url = Uri.parse('$baseUrl/otp_login.php');

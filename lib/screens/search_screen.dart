@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/bottom_nav.dart';
 import '../api/vehicle_api.dart';
+import 'dashboard_screen.dart'; // Import your Dashboard screen
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -33,6 +34,15 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: IconThemeData(color: redColor),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => DashboardScreen()),
+            );
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -60,58 +70,67 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             SizedBox(height: 24),
 
-            // Result Card
-            result == null
-                ? Text(
-                    'No results found',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontStyle: FontStyle.italic,
-                    ),
-                  )
-                : Card(
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: result!.entries.map((entry) {
-                          final isStatus = entry.key.toLowerCase() == 'status';
-                          final isRegistered = entry.value.toString().toLowerCase() == 'registered';
+            // Result Card or Message
+            if (result == null)
+              Text(
+                'Enter a plate number to search',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontStyle: FontStyle.italic,
+                ),
+              )
+            else if (result!['status'] == 'not_found')
+              Text(
+                'No vehicle found with that plate number.',
+                style: TextStyle(
+                  color: Colors.red[600],
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            else
+              Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: result!.entries.map((entry) {
+                      final isStatus = entry.key.toLowerCase() == 'status';
+                      final isRegistered = entry.value.toString().toLowerCase() == 'registered';
 
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${entry.key}: ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.grey[800],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    '${entry.value}',
-                                    style: TextStyle(
-                                      color: isStatus
-                                          ? (isRegistered ? Colors.green : Colors.red)
-                                          : Colors.black,
-                                      fontWeight: isStatus ? FontWeight.bold : FontWeight.normal,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${entry.key}: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.grey[800],
+                              ),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                            Expanded(
+                              child: Text(
+                                '${entry.value}',
+                                style: TextStyle(
+                                  color: isStatus
+                                      ? (isRegistered ? Colors.green : Colors.red)
+                                      : Colors.black,
+                                  fontWeight: isStatus ? FontWeight.bold : FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
+                ),
+              ),
           ],
         ),
       ),
