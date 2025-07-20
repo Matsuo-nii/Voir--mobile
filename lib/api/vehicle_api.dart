@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class VehicleAPI {
-  static const String _baseUrl = 'http://192.168.254.168/voir_api';
+  static const String _baseUrl = 'http://192.168.91.21/voir_api';
 
   static Future<Map<String, dynamic>?> searchVehicle(String plate) async {
     try {

@@ -23,7 +23,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> fetchDashboardData() async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.254.168/voir_api/get_dashboard_stats.php'));
+      final response = await http.get(Uri.parse('http://192.168.91.21/voir_api/get_dashboard_stats.php'));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -36,7 +36,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       }
 
       // Optional: Fetch guard names
-      final guardResponse = await http.get(Uri.parse('http://192.168.254.168/voir_api/get_guards.php'));
+      final guardResponse = await http.get(Uri.parse('192.168.91.21/voir_api/get_guards.php'));
       if (guardResponse.statusCode == 200) {
         final guardData = json.decode(guardResponse.body);
         setState(() {
