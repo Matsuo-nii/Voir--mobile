@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class VehicleAPI {
   static Future<Map<String, dynamic>?> searchVehicle(String plate) async {
     try {
-      final url = Uri.parse('http://10.0.2.2/voir_api/get_vehicle.php?plate=$plate');
+      final url = Uri.parse('http://192.168.91.21/voir_api/get_vehicle.php?plate=$plate');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {

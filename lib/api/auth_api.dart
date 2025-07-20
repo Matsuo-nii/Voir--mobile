@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AuthAPI {
-  static const String baseUrl = 'http://10.0.2.2/voir_api';
+  static const String baseUrl = 'http://192.168.91.21/voir_api';
 
   static Future<bool> register(String username, String email, String password) async {
     final url = Uri.parse('$baseUrl/register.php');
